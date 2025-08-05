@@ -286,6 +286,29 @@
             box-shadow: 0 8px 25px rgba(30, 60, 114, 0.3);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffffff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         /* Thank You Page */
         .thank-you {
             display: none;
@@ -502,7 +525,10 @@
                         </select>
                     </div>
                     
-                    <button type="submit" class="submit-btn">Submit Membership Request</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="loading-spinner" id="loadingSpinner"></span>
+                        <span id="submitText">Submit Membership Request</span>
+                    </button>
                 </form>
             </div>
         </section>
@@ -535,23 +561,63 @@
     </div>
 
     <script>
+        // Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8GPXIOtZ5Oqkq4PXwLyJuq4dsGsqUm3kGi-u_RA-tg7KMs_o_J7H4G2icxUD36UxDTA/exec';
+
         // Form submission handling
         document.getElementById('membershipForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const submitText = document.getElementById('submitText');
+            
+            submitBtn.disabled = true;
+            loadingSpinner.style.display = 'inline-block';
+            submitText.textContent = 'Submitting...';
             
             // Get form data
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
             
-            // Simulate form submission (replace with actual backend integration)
-            console.log('Membership request submitted:', data);
+            // Add timestamp
+            data.timestamp = new Date().toISOString();
             
-            // Show thank you page
-            showThankYouPage();
-            
-            // Optional: Send to Google Sheets or email service
-            // submitToGoogleSheets(data);
+            // Submit to Google Sheets
+            submitToGoogleSheets(data)
+                .then(() => {
+                    // Show thank you page on success
+                    showThankYouPage();
+                })
+                .catch((error) => {
+                    console.error('Error submitting form:', error);
+                    alert('There was an error submitting your form. Please try again.');
+                })
+                .finally(() => {
+                    // Reset button state
+                    submitBtn.disabled = false;
+                    loadingSpinner.style.display = 'none';
+                    submitText.textContent = 'Submit Membership Request';
+                });
         });
+
+        function submitToGoogleSheets(data) {
+            return fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Important for Google Apps Script
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                // Note: With no-cors mode, we can't read the response
+                // We'll assume success if no network error occurs
+                console.log('Data sent to Google Sheets');
+                return Promise.resolve();
+            });
+        }
 
         function showThankYouPage() {
             document.getElementById('landing-page').classList.add('hidden');
@@ -567,18 +633,51 @@
             window.scrollTo(0, 0);
         }
 
-        // Badge download functionality
+        // Badge download functionality with your custom logo
         document.getElementById('downloadBadge').addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Create a downloadable badge (SVG)
+            // Create a downloadable badge using your logo design
             const badgeContent = `
-                <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="100" cy="100" r="95" fill="#1e3c72" stroke="#fff" stroke-width="5"/>
-                    <text x="100" y="85" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">GPLA</text>
-                    <text x="100" y="110" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">MEMBER</text>
-                    <text x="100" y="130" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Global Plant Leadership</text>
-                    <text x="100" y="145" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Association</text>
+                <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6AADE4;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#5A9BD4;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.2"/>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Background with rounded corners -->
+                    <rect x="20" y="20" width="360" height="360" rx="40" ry="40" fill="url(#blueGradient)" filter="url(#shadow)"/>
+                    
+                    <!-- Top blue section -->
+                    <rect x="20" y="20" width="360" height="240" rx="40" ry="40" fill="url(#blueGradient)"/>
+                    <rect x="20" y="220" width="360" height="40" fill="url(#blueGradient)"/>
+                    
+                    <!-- Bottom white section -->
+                    <rect x="20" y="240" width="360" height="140" rx="0" ry="0" fill="#F5F5F5"/>
+                    <rect x="20" y="340" width="360" height="40" rx="0" ry="40" fill="#F5F5F5"/>
+                    
+                    <!-- GPLA Text with leaf icon -->
+                    <text x="200" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">GPLA</text>
+                    
+                    <!-- Decorative leaf/plant icon -->
+                    <g transform="translate(300, 80)">
+                        <path d="M0,0 Q15,-10 25,0 Q15,10 0,0" fill="white" opacity="0.9"/>
+                        <path d="M5,0 Q20,-15 35,0 Q20,15 5,0" fill="white" opacity="0.7"/>
+                        <path d="M10,0 Q25,-20 45,0 Q25,20 10,0" fill="white" opacity="0.5"/>
+                    </g>
+                    
+                    <!-- Full organization name -->
+                    <text x="200" y="170" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">GLOBAL PLANT</text>
+                    <text x="200" y="195" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">LEADERS</text>
+                    <text x="200" y="220" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">ASSOCIATION</text>
+                    
+                    <!-- MEMBER text -->
+                    <text x="200" y="320" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#1e3c72" text-anchor="middle">MEMBER</text>
                 </svg>
             `;
             
@@ -616,27 +715,6 @@
                 navbar.style.background = 'rgba(30, 60, 114, 0.95)';
             }
         });
-
-        // Optional: Google Sheets integration function
-        function submitToGoogleSheets(data) {
-            // Replace with your Google Apps Script Web App URL
-            const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
-            
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log('Data sent to Google Sheets:', result);
-            })
-            .catch(error => {
-                console.error('Error sending to Google Sheets:', error);
-            });
-        }
     </script>
 </body>
 </html>
