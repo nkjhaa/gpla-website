@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Plant Leadership Association - Uniting the World's Plant Leaders</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            animation: slidePattern 20s linear infinite;
+        }
+
+        @keyframes slidePattern {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(10px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 60, 114, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b6b;
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #1e3c72;
+        }
+
+        /* About Section */
+        .about {
+            background: #f8f9fa;
+        }
+
+        .about-content {
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Goals Section */
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .goal-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .goal-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .goal-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .goal-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #1e3c72;
+        }
+
+        /* Benefits Section */
+        .benefits {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .benefit-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Membership Form */
+        .membership-form {
+            background: #f8f9fa;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1e3c72;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(30, 60, 114, 0.3);
+        }
+
+        /* Thank You Page */
+        .thank-you {
+            display: none;
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #00c851 0%, #007e33 100%);
+            color: white;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .thank-you-content {
+            max-width: 600px;
+        }
+
+        .thank-you h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .badge-download {
+            background: white;
+            color: #007e33;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .badge-download:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-tagline {
+                font-size: 1.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .goals-grid,
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Page transitions */
+        .page {
+            display: block;
+        }
+
+        .page.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-content">
+            <div class="logo">GPLA</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#goals">Goals</a></li>
+                <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#membership">Join</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Landing Page -->
+    <div id="landing-page" class="page">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <h1>GPLA</h1>
+                <p class="hero-tagline">Uniting the World's Plant Leaders</p>
+                <a href="#membership" class="cta-button">Request Membership</a>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="section about" id="about">
+            <h2>About GPLA</h2>
+            <div class="about-content">
+                <p>The Global Plant Leadership Association (GPLA) is the premier professional organization dedicated to connecting and empowering plant directors, manufacturing leaders, and operations executives worldwide.</p>
+                
+                <p>Our mission is to foster collaboration, share best practices, and drive innovation across the global manufacturing landscape. We believe that by uniting the world's most experienced plant leaders, we can collectively shape the future of industry and manufacturing excellence.</p>
+                
+                <p>Join a community of visionary leaders who are committed to operational excellence, sustainable practices, and the advancement of manufacturing capabilities across all industries and borders.</p>
+            </div>
+        </section>
+
+        <!-- Goals Section -->
+        <section class="section" id="goals">
+            <h2>Our Key Goals</h2>
+            <div class="goals-grid">
+                <div class="goal-card">
+                    <div class="goal-icon">🌐</div>
+                    <h3>Knowledge Sharing Across Borders</h3>
+                    <p>Facilitate the exchange of innovative ideas, best practices, and lessons learned across different markets, cultures, and manufacturing environments.</p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-icon">🏆</div>
+                    <h3>Leadership Recognition & Networking</h3>
+                    <p>Provide a platform for recognizing exceptional plant leadership while building meaningful professional relationships that span the globe.</p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-icon">⚙️</div>
+                    <h3>Driving Manufacturing Excellence</h3>
+                    <p>Promote operational excellence through shared insights on lean manufacturing, automation, quality systems, and continuous improvement methodologies.</p>
+                </div>
+                <div class="goal-card">
+                    <div class="goal-icon">🚀</div>
+                    <h3>Shaping the Future of Industry</h3>
+                    <p>Lead conversations on emerging technologies, sustainability initiatives, and workforce development that will define the next generation of manufacturing.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Benefits Section -->
+        <section class="section benefits" id="benefits">
+            <h2>Member Benefits</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h3>📊 Exclusive Industry Reports</h3>
+                    <p>Access comprehensive market intelligence, benchmarking data, and industry trend analyses compiled specifically for plant leadership professionals.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>🤝 Global Peer Networking</h3>
+                    <p>Connect with plant directors and manufacturing leaders from Fortune 500 companies and innovative mid-market organizations worldwide.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>🎖️ Recognition Badge & Certification</h3>
+                    <p>Display your GPLA membership with pride through our LinkedIn certification badge and official member recognition credentials.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>🎪 Leadership Summits & Events</h3>
+                    <p>Receive exclusive invitations to quarterly leadership summits, virtual roundtables, and annual conferences featuring industry thought leaders.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Membership Form Section -->
+        <section class="section membership-form" id="membership">
+            <h2>Request Membership</h2>
+            <div class="form-container">
+                <form id="membershipForm">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="jobTitle">Job Title *</label>
+                        <input type="text" id="jobTitle" name="jobTitle" required placeholder="e.g., Plant Manager, Operations Director, Manufacturing VP">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="company">Company *</label>
+                        <input type="text" id="company" name="company" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location *</label>
+                        <input type="text" id="location" name="location" required placeholder="City, Country">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience">Years in Leadership Role *</label>
+                        <select id="experience" name="experience" required>
+                            <option value="">Select experience level</option>
+                            <option value="0-2">0-2 years</option>
+                            <option value="3-5">3-5 years</option>
+                            <option value="6-10">6-10 years</option>
+                            <option value="11-15">11-15 years</option>
+                            <option value="16+">16+ years</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Submit Membership Request</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Global Plant Leadership Association. All rights reserved.</p>
+            <p>Uniting the World's Plant Leaders</p>
+        </footer>
+    </div>
+
+    <!-- Thank You Page -->
+    <div id="thank-you-page" class="thank-you page hidden">
+        <div class="thank-you-content">
+            <h2>Welcome to GPLA! 🎉</h2>
+            <p>Thank you for requesting membership in the Global Plant Leadership Association. Your application has been received and will be reviewed within 48 hours.</p>
+            
+            <div style="margin: 2rem 0;">
+                <a href="#" class="badge-download" id="downloadBadge">📥 Download GPLA Badge</a>
+                <br>
+                <a href="https://www.linkedin.com/in/[your-profile]" class="badge-download" target="_blank">🔗 Add LinkedIn Certification</a>
+            </div>
+            
+            <p>You'll receive a confirmation email shortly with your membership details and next steps.</p>
+            
+            <div style="margin-top: 2rem;">
+                <a href="#" class="badge-download" onclick="showLandingPage()">← Return to Homepage</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form submission handling
+        document.getElementById('membershipForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simulate form submission (replace with actual backend integration)
+            console.log('Membership request submitted:', data);
+            
+            // Show thank you page
+            showThankYouPage();
+            
+            // Optional: Send to Google Sheets or email service
+            // submitToGoogleSheets(data);
+        });
+
+        function showThankYouPage() {
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('thank-you-page').classList.remove('hidden');
+            document.getElementById('thank-you-page').style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
+        function showLandingPage() {
+            document.getElementById('thank-you-page').classList.add('hidden');
+            document.getElementById('landing-page').classList.remove('hidden');
+            document.getElementById('thank-you-page').style.display = 'none';
+            window.scrollTo(0, 0);
+        }
+
+        // Badge download functionality
+        document.getElementById('downloadBadge').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Create a downloadable badge (SVG)
+            const badgeContent = `
+                <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="95" fill="#1e3c72" stroke="#fff" stroke-width="5"/>
+                    <text x="100" y="85" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" text-anchor="middle">GPLA</text>
+                    <text x="100" y="110" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">MEMBER</text>
+                    <text x="100" y="130" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Global Plant Leadership</text>
+                    <text x="100" y="145" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">Association</text>
+                </svg>
+            `;
+            
+            const blob = new Blob([badgeContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'GPLA-Member-Badge.svg';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(30, 60, 114, 0.98)';
+            } else {
+                navbar.style.background = 'rgba(30, 60, 114, 0.95)';
+            }
+        });
+
+        // Optional: Google Sheets integration function
+        function submitToGoogleSheets(data) {
+            // Replace with your Google Apps Script Web App URL
+            const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+            
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Data sent to Google Sheets:', result);
+            })
+            .catch(error => {
+                console.error('Error sending to Google Sheets:', error);
+            });
+        }
+    </script>
+</body>
+</html>
