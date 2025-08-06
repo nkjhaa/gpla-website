@@ -229,6 +229,37 @@
             margin-bottom: 1rem;
         }
 
+        /* Companies Section */
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            align-items: center;
+        }
+
+        .company-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 80px;
+        }
+
+        .company-logo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .company-logo svg {
+            width: 120px;
+            height: 40px;
+        }
+
         /* Membership Form */
         .membership-form {
             background: #f8f9fa;
@@ -402,6 +433,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#goals">Goals</a></li>
                 <li><a href="#benefits">Benefits</a></li>
+                <li><a href="#companies">Companies</a></li>
                 <li><a href="#membership">Join</a></li>
             </ul>
         </div>
@@ -476,6 +508,92 @@
                 <div class="benefit-card">
                     <h3>🎪 Leadership Summits & Events</h3>
                     <p>Receive exclusive invitations to quarterly leadership summits, virtual roundtables, and annual conferences featuring industry thought leaders.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Companies Section -->
+        <section class="section" id="companies">
+            <h2>Our Members Lead at World-Class Organizations</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 3rem; color: #666;">
+                GPLA members hold leadership positions at some of the world's most recognized manufacturing companies
+            </p>
+            <div class="companies-grid">
+                <!-- Coca-Cola -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <text x="100" y="35" font-family="'Brush Script MT', cursive" font-size="24" font-weight="bold" fill="#DC143C" text-anchor="middle">Coca-Cola</text>
+                    </svg>
+                </div>
+                
+                <!-- Nestlé -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="30" r="8" fill="#8B4513"/>
+                        <text x="100" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#8B4513" text-anchor="middle">Nestlé</text>
+                    </svg>
+                </div>
+                
+                <!-- PepsiCo -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="30" cy="30" r="12" fill="#004B93"/>
+                        <circle cx="30" cy="30" r="8" fill="#FF0000"/>
+                        <text x="100" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#004B93" text-anchor="middle">PepsiCo</text>
+                    </svg>
+                </div>
+                
+                <!-- Unilever -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <text x="100" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#0078D4" text-anchor="middle">unilever</text>
+                    </svg>
+                </div>
+                
+                <!-- P&G -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="30" r="20" fill="none" stroke="#003087" stroke-width="2"/>
+                        <text x="100" y="35" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#003087" text-anchor="middle">P&G</text>
+                    </svg>
+                </div>
+                
+                <!-- Johnson & Johnson -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <text x="100" y="30" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#CC0000" text-anchor="middle">JOHNSON</text>
+                        <text x="100" y="45" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#CC0000" text-anchor="middle">&amp; JOHNSON</text>
+                    </svg>
+                </div>
+                
+                <!-- General Mills -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <text x="100" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#0066CC" text-anchor="middle">General</text>
+                        <text x="100" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#0066CC" text-anchor="middle">Mills</text>
+                    </svg>
+                </div>
+                
+                <!-- Kraft Heinz -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <text x="100" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#CC0000" text-anchor="middle">KRAFT</text>
+                        <text x="100" y="45" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#CC0000" text-anchor="middle">HEINZ</text>
+                    </svg>
+                </div>
+                
+                <!-- Mondelez -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <text x="100" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#663399" text-anchor="middle">mondelez</text>
+                    </svg>
+                </div>
+                
+                <!-- Mars -->
+                <div class="company-logo">
+                    <svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+                        <text x="100" y="35" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#8B0000" text-anchor="middle">MARS</text>
+                    </svg>
                 </div>
             </div>
         </section>
