@@ -38,13 +38,15 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            animation: slidePattern 20s linear infinite;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/><g opacity="0.1" fill="white"><rect x="100" y="400" width="120" height="200" rx="5"/><rect x="105" y="380" width="20" height="40" rx="2"/><rect x="140" y="350" width="15" height="70" rx="2"/><rect x="170" y="360" width="25" height="60" rx="2"/><rect x="250" y="420" width="100" height="180" rx="5"/><rect x="255" y="400" width="15" height="40" rx="2"/><rect x="285" y="380" width="20" height="60" rx="2"/><rect x="320" y="390" width="15" height="50" rx="2"/><rect x="400" y="440" width="80" height="160" rx="5"/><rect x="405" y="420" width="12" height="40" rx="2"/><rect x="430" y="400" width="18" height="60" rx="2"/><rect x="460" y="410" width="12" height="50" rx="2"/><rect x="550" y="380" width="140" height="220" rx="5"/><rect x="555" y="360" width="25" height="40" rx="2"/><rect x="590" y="340" width="20" height="60" rx="2"/><rect x="620" y="350" width="30" height="50" rx="2"/><rect x="660" y="330" width="15" height="70" rx="2"/><rect x="750" y="420" width="90" height="180" rx="5"/><rect x="755" y="400" width="18" height="40" rx="2"/><rect x="785" y="380" width="22" height="60" rx="2"/><rect x="900" y="460" width="110" height="140" rx="5"/><rect x="905" y="440" width="20" height="40" rx="2"/><rect x="940" y="420" width="15" height="60" rx="2"/><rect x="970" y="430" width="25" height="50" rx="2"/><circle cx="150" cy="450" r="3"/><circle cx="280" cy="470" r="4"/><circle cx="430" cy="490" r="3"/><circle cx="600" cy="430" r="5"/><circle cx="780" cy="460" r="3"/><circle cx="950" cy="510" r="4"/><rect x="0" y="580" width="1200" height="20" rx="2"/></g></svg>');
+            background-size: cover;
+            background-position: center bottom;
+            animation: slidePattern 30s linear infinite;
         }
 
         @keyframes slidePattern {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(10px); }
+            0% { transform: translateX(-20px); }
+            100% { transform: translateX(20px); }
         }
 
         .hero-content {
@@ -549,7 +551,7 @@
             <div style="margin: 2rem 0;">
                 <a href="#" class="badge-download" id="downloadBadge">📥 Download GPLA Badge</a>
                 <br>
-                <a href="https://www.linkedin.com/in/[your-profile]" class="badge-download" target="_blank">🔗 Add LinkedIn Certification</a>
+                <a href="#" class="badge-download" id="linkedinCertButton">🔗 Add LinkedIn Certification</a>
             </div>
             
             <p>You'll receive a confirmation email shortly with your membership details and next steps.</p>
@@ -632,6 +634,32 @@
             document.getElementById('thank-you-page').style.display = 'none';
             window.scrollTo(0, 0);
         }
+
+        // LinkedIn certification functionality
+        document.getElementById('linkedinCertButton').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const instructions = `
+To add GPLA certification to your LinkedIn profile:
+
+1. Go to your LinkedIn profile
+2. Click "Add profile section" → "Licenses & certifications"
+3. Fill in the details:
+   • Name: "Global Plant Leadership Association Member"
+   • Issuing organization: "Global Plant Leadership Association (GPLA)"
+   • Issue date: ${new Date().toLocaleDateString()}
+   • Credential ID: GPLA-${Date.now()}
+   • Credential URL: Leave blank or add your company website
+
+4. Click "Save"
+
+Would you like to open LinkedIn now?
+            `;
+            
+            if (confirm(instructions.trim())) {
+                window.open('https://www.linkedin.com/in/me/edit/forms/certification/new/', '_blank');
+            }
+        });
 
         // Badge download functionality with your custom logo
         document.getElementById('downloadBadge').addEventListener('click', function(e) {
