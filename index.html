@@ -863,4 +863,355 @@ Upload Profile Picture *
 
 <div class="form-row">
 <div class="form-group">
-<label for="profileCompany">Company *</label
+<label for="profileCompany">Company *</label>
+<input type="text" id="profileCompany" name="profileCompany" required>
+</div>
+<div class="form-group">
+<label for="profileCity">City *</label>
+<input type="text" id="profileCity" name="profileCity" required placeholder="e.g., Chicago, IL">
+</div>
+</div>
+
+<div class="form-group">
+<label for="profileLinkedIn">LinkedIn Profile URL *</label>
+<div class="url-input">
+<input type="url" id="profileLinkedIn" name="profileLinkedIn" required placeholder="https://linkedin.com/in/yourprofile">
+</div>
+</div>
+
+<button type="submit" class="profile-submit-btn" id="profileSubmitBtn">
+<span class="loading-spinner" id="profileLoadingSpinner"></span>
+<span id="profileSubmitText">Complete Profile & Join GPLA</span>
+</button>
+</form>
+</div>
+</div>
+</div>
+
+<!-- Thank You Page -->
+<div id="thank-you-page" class="thank-you page hidden">
+<div class="thank-you-content">
+<h2>Welcome to GPLA! 🎉</h2>
+<p>Thank you for requesting membership in the Global Plant Leadership Association. Your application has been received and will be reviewed within 48 hours.</p>
+
+<div style="margin: 2rem 0;">
+<a href="#" class="badge-download" id="downloadBadge">📥 Download GPLA Badge</a>
+<br>
+<a href="#" class="badge-download" id="linkedinCertButton">🔗 Add LinkedIn Certification</a>
+</div>
+
+<p>You'll receive a confirmation email shortly with your membership details and next steps.</p>
+
+<div style="margin-top: 2rem;">
+<a href="#" class="badge-download" onclick="showLandingPage()">← Return to Homepage</a>
+</div>
+</div>
+</div>
+
+<!-- Profile Success Page -->
+<div id="profile-success-page" class="profile-success page hidden">
+<div class="profile-success-content">
+<h2>Profile Complete! 🚀</h2>
+<p>Your GPLA profile has been successfully created. You're now part of our exclusive network of global manufacturing leaders!</p>
+
+<div style="margin: 2rem 0;">
+<a href="#" class="badge-download" id="downloadBadgeProfile">📥 Download GPLA Member Badge</a>
+<br>
+<a href="#" class="badge-download" id="linkedinCertButtonProfile">🔗 Add LinkedIn Certification</a>
+</div>
+
+<p>Welcome to the Global Plant Leadership Association community. Check your email for next steps and upcoming events!</p>
+
+<div style="margin-top: 2rem;">
+<a href="#" class="badge-download" onclick="showLandingPage()">← Return to Homepage</a>
+</div>
+</div>
+</div>
+
+<script>
+// Google Apps Script URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8GPXIOtZ5Oqkq4PXwLyJuq4dsGsqUm3kGi-u_RA-tg7KMs_o_J7H4G2icxUD36UxDTA/exec';
+
+let membershipData = {};
+
+// Form submission handling
+document.getElementById('membershipForm').addEventListener('submit', function(e) {
+e.preventDefault();
+
+// Show loading state
+const submitBtn = document.getElementById('submitBtn');
+const loadingSpinner = document.getElementById('loadingSpinner');
+const submitText = document.getElementById('submitText');
+
+submitBtn.disabled = true;
+loadingSpinner.style.display = 'inline-block';
+submitText.textContent = 'Submitting...';
+
+// Get form data
+const formData = new FormData(this);
+membershipData = Object.fromEntries(formData);
+
+// Add timestamp
+membershipData.timestamp = new Date().toISOString();
+
+// Submit to Google Sheets
+submitToGoogleSheets(membershipData)
+.then(() => {
+// Show profile page on success
+showProfilePage();
+})
+.catch((error) => {
+console.error('Error submitting form:', error);
+alert('There was an error submitting your form. Please try again.');
+})
+.finally(() => {
+// Reset button state
+submitBtn.disabled = false;
+loadingSpinner.style.display = 'none';
+submitText.textContent = 'Submit Membership Request';
+});
+});
+
+// Profile form submission
+document.getElementById('profileForm').addEventListener('submit', function(e) {
+e.preventDefault();
+
+// Show loading state
+const submitBtn = document.getElementById('profileSubmitBtn');
+const loadingSpinner = document.getElementById('profileLoadingSpinner');
+const submitText = document.getElementById('profileSubmitText');
+
+submitBtn.disabled = true;
+loadingSpinner.style.display = 'inline-block';
+submitText.textContent = 'Creating Profile...';
+
+// Get profile form data
+const formData = new FormData(this);
+const profileData = Object.fromEntries(formData);
+
+// Handle image file
+const imageFile = document.getElementById('profileImageInput').files[0];
+if (imageFile) {
+const reader = new FileReader();
+reader.onload = function(e) {
+profileData.profileImage = e.target.result;
+submitProfileData(profileData, submitBtn, loadingSpinner, submitText);
+};
+reader.readAsDataURL(imageFile);
+} else {
+submitProfileData(profileData, submitBtn, loadingSpinner, submitText);
+}
+});
+
+function submitProfileData(profileData, submitBtn, loadingSpinner, submitText) {
+// Combine membership and profile data
+const completeData = {
+...membershipData,
+...profileData,
+profileCompleted: true,
+profileTimestamp: new Date().toISOString()
+};
+
+// Submit complete profile to Google Sheets
+submitToGoogleSheets(completeData)
+.then(() => {
+// Show profile success page
+showProfileSuccessPage();
+})
+.catch((error) => {
+console.error('Error submitting profile:', error);
+alert('There was an error creating your profile. Please try again.');
+})
+.finally(() => {
+// Reset button state
+submitBtn.disabled = false;
+loadingSpinner.style.display = 'none';
+submitText.textContent = 'Complete Profile & Join GPLA';
+});
+}
+
+// Image upload preview
+document.getElementById('profileImageInput').addEventListener('change', function(e) {
+const file = e.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = function(e) {
+const preview = document.getElementById('imagePreview');
+preview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview">`;
+};
+reader.readAsDataURL(file);
+}
+});
+
+function submitToGoogleSheets(data) {
+return fetch(GOOGLE_SCRIPT_URL, {
+method: 'POST',
+mode: 'no-cors', // Important for Google Apps Script
+headers: {
+'Content-Type': 'application/json',
+},
+body: JSON.stringify(data)
+})
+.then(response => {
+// Note: With no-cors mode, we can't read the response
+// We'll assume success if no network error occurs
+console.log('Data sent to Google Sheets');
+return Promise.resolve();
+});
+}
+
+function showProfilePage() {
+document.getElementById('landing-page').classList.add('hidden');
+document.getElementById('profile-page').classList.remove('hidden');
+window.scrollTo(0, 0);
+
+// Pre-populate profile form with membership data
+if (membershipData.fullName) document.getElementById('profileName').value = membershipData.fullName;
+if (membershipData.jobTitle) document.getElementById('profileTitle').value = membershipData.jobTitle;
+if (membershipData.company) document.getElementById('profileCompany').value = membershipData.company;
+if (membershipData.location) document.getElementById('profileCity').value = membershipData.location;
+}
+
+function showThankYouPage() {
+document.getElementById('landing-page').classList.add('hidden');
+document.getElementById('thank-you-page').classList.remove('hidden');
+window.scrollTo(0, 0);
+}
+
+function showProfileSuccessPage() {
+document.getElementById('profile-page').classList.add('hidden');
+document.getElementById('profile-success-page').classList.remove('hidden');
+window.scrollTo(0, 0);
+}
+
+function showLandingPage() {
+// Hide all pages
+document.querySelectorAll('.page').forEach(page => {
+page.classList.add('hidden');
+});
+// Show landing page
+document.getElementById('landing-page').classList.remove('hidden');
+window.scrollTo(0, 0);
+}
+
+// LinkedIn certification functionality (both buttons)
+function setupLinkedInButton(buttonId) {
+document.getElementById(buttonId).addEventListener('click', function(e) {
+e.preventDefault();
+
+const instructions = `
+To add GPLA certification to your LinkedIn profile:
+
+1. Go to your LinkedIn profile
+2. Click "Add profile section" → "Licenses & certifications"
+3. Fill in the details:
+• Name: "Global Plant Leadership Association Member"
+• Issuing organization: "Global Plant Leadership Association (GPLA)"
+• Issue date: ${new Date().toLocaleDateString()}
+• Credential ID: GPLA-${Date.now()}
+• Credential URL: Leave blank or add your company website
+
+4. Click "Save"
+
+Would you like to open LinkedIn now?
+`;
+
+if (confirm(instructions.trim())) {
+window.open('https://www.linkedin.com/in/me/edit/forms/certification/new/', '_blank');
+}
+});
+}
+
+setupLinkedInButton('linkedinCertButton');
+setupLinkedInButton('linkedinCertButtonProfile');
+
+// Badge download functionality (both buttons)
+function setupBadgeDownload(buttonId) {
+document.getElementById(buttonId).addEventListener('click', function(e) {
+e.preventDefault();
+
+// Create a downloadable badge
+const badgeContent = `
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+<stop offset="0%" style="stop-color:#6AADE4;stop-opacity:1" />
+<stop offset="100%" style="stop-color:#5A9BD4;stop-opacity:1" />
+</linearGradient>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+<feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.2"/>
+</filter>
+</defs>
+
+<!-- Background with rounded corners -->
+<rect x="20" y="20" width="360" height="360" rx="40" ry="40" fill="url(#blueGradient)" filter="url(#shadow)"/>
+
+<!-- Top blue section -->
+<rect x="20" y="20" width="360" height="240" rx="40" ry="40" fill="url(#blueGradient)"/>
+<rect x="20" y="220" width="360" height="40" fill="url(#blueGradient)"/>
+
+<!-- Bottom white section -->
+<rect x="20" y="240" width="360" height="140" rx="0" ry="0" fill="#F5F5F5"/>
+<rect x="20" y="340" width="360" height="40" rx="0" ry="40" fill="#F5F5F5"/>
+
+<!-- GPLA Text with leaf icon -->
+<text x="200" y="120" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">GPLA</text>
+
+<!-- Decorative leaf/plant icon -->
+<g transform="translate(300, 80)">
+<path d="M0,0 Q15,-10 25,0 Q15,10 0,0" fill="white" opacity="0.9"/>
+<path d="M5,0 Q20,-15 35,0 Q20,15 5,0" fill="white" opacity="0.7"/>
+<path d="M10,0 Q25,-20 45,0 Q25,20 10,0" fill="white" opacity="0.5"/>
+</g>
+
+<!-- Full organization name -->
+<text x="200" y="170" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">GLOBAL PLANT</text>
+<text x="200" y="195" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">LEADERS</text>
+<text x="200" y="220" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle">ASSOCIATION</text>
+
+<!-- MEMBER text -->
+<text x="200" y="320" font-family="Arial, sans-serif" font-size="42" font-weight="bold" fill="#1e3c72" text-anchor="middle">MEMBER</text>
+</svg>
+`;
+
+const blob = new Blob([badgeContent], { type: 'image/svg+xml' });
+const url = URL.createObjectURL(blob);
+const a = document.createElement('a');
+a.href = url;
+a.download = 'GPLA-Member-Badge.svg';
+document.body.appendChild(a);
+a.click();
+document.body.removeChild(a);
+URL.revokeObjectURL(url);
+});
+}
+
+setupBadgeDownload('downloadBadge');
+setupBadgeDownload('downloadBadgeProfile');
+
+// Smooth scrolling for navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function (e) {
+e.preventDefault();
+const target = document.querySelector(this.getAttribute('href'));
+if (target) {
+target.scrollIntoView({
+behavior: 'smooth',
+block: 'start'
+});
+}
+});
+});
+
+// Navbar background on scroll
+window.addEventListener('scroll', function() {
+const navbar = document.getElementById('navbar');
+if (window.scrollY > 100) {
+navbar.style.background = 'rgba(30, 60, 114, 0.98)';
+} else {
+navbar.style.background = 'rgba(30, 60, 114, 0.95)';
+}
+});
+</script>
+</body>
+</html>
